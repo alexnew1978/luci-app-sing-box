@@ -1,0 +1,65 @@
+msgid ""
+msgstr "Content-Type: text/plain; charset=UTF-8"
+
+msgid "sing-box"
+msgstr "sing-box"
+
+msgid "The universal proxy platform."
+msgstr "一个通用代理平台。"
+
+msgid "Official Documentation"
+msgstr "官方文档"
+
+msgid "Base Settings"
+msgstr "基础设置"
+
+msgid "Configuration file"
+msgstr "配置文件"
+
+msgid "RUNNING"
+msgstr "运行中"
+
+msgid "NOT RUNNING"
+msgstr "未运行"
+
+msgid "Version"
+msgstr "版本"
+
+msgid "Uptime"
+msgstr "运行时间"
+
+msgid "Collecting data..."
+msgstr "正在收集数据..."
+
+msgid "Enable"
+msgstr "启用"
+
+msgid "Work directory"
+msgstr "工作目录"
+
+msgid "Username"
+msgstr "用户名"
+
+msgid "Log to stderr"
+msgstr "写入系统错误日志"
+
+msgid "Log to stdout"
+msgstr "写入系统基础日志"
+
+msgid "Configuration has been applied and sing-box has been restarted"
+msgstr "配置已应用，sing-box 已重启"
+
+msgid "Here you can edit sing-box configuration file. Sing-box will be restart automatically after apply."
+msgstr "在这里您可以编辑 sing-box 配置文件。应用后，Sing-box 将自动重启。"
+
+msgid "Save & Apply"
+msgstr "保存并应用"
+
+msgid "Cancel"
+msgstr "取消"
+
+msgid "Grant access to sing-box configuration"
+msgstr "授予访问 sing-box 配置的权限"
+
+msgid "Configuration"
+msgstr "配置"

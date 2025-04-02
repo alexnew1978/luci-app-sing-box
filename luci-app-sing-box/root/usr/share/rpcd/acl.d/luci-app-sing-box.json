@@ -1,0 +1,11 @@
+{
+  "luci-app-sing-box": {
+    "description": "Grant access to sing-box configuration",
+    "read": {
+      "uci": ["sing-box"]
+    },
+    "write": {
+      "uci": ["sing-box"]
+    }
+  }
+}

@@ -1,0 +1,28 @@
+<script type="text/javascript">
+  //<![CDATA[
+  XHR.poll(3, '<%=url([[admin]], [[services]], [[sing-box]], [[get_status]])%>', null, function (x, data) {
+    var tb = document.getElementById('status')
+
+    if (data && tb) {
+      if (data.running) {
+        tb.innerHTML = '<em><b style="color:green"><%:sing-box%> <%:RUNNING%></b></em>'
+      } else {
+        tb.innerHTML = '<em><b style="color:red"><%:sing-box%> <%:NOT RUNNING%></b></em>'
+      }
+    }
+  })
+
+  XHR.poll(10, '<%=url([[admin]], [[services]], [[sing-box]], [[get_version]])%>', null, function (x, data) {
+    var version_elem = document.getElementById('sing_box_version')
+    if (data && version_elem) {
+      version_elem.innerHTML = data.version
+    }
+  })
+
+  //]]>
+</script>
+<fieldset class="cbi-section">
+  <p id="status">
+    <em><%:Collecting data...%></em><span> <%:Version%>: </span><em id="sing_box_version"><%:Collecting data...%></em>
+  </p>
+</fieldset>
