@@ -4,16 +4,11 @@ local http = require "luci.http"
 
 m = Map("sing-box")
 m.title = translate("sing-box")
-m.description = translate("Here you can edit sing-box configuration file. Sing-box will be restart automatically after apply.")
+m.description = translate(
+    "Here you can edit sing-box configuration file. Sing-box will be restart automatically after apply.")
 
-local apply = http.formvalue("cbi.apply")
-if apply then
-    http.redirect(luci.dispatcher.build_url("admin", "services", "sing-box", "config") .. "?success=1")
-end
-
-if http.formvalue("success") == "1" then
-    m.message = translate("Configuration has been applied and sing-box has been restarted")
-end
+m.apply_on_parse = false
+m.reset = false
 
 s = m:section(TypedSection, "sing-box", translate("Configuration file"))
 s.anonymous = true
@@ -22,7 +17,7 @@ s.addremove = false
 local conffile = "/etc/sing-box/config.json"
 
 o = s:option(TextValue, "config_content")
-o.rows = 35
+o.rows = 34
 o.wrap = "off"
 o.rmempty = false
 o.template = "cbi/tvalue"
@@ -36,7 +31,7 @@ function o.write(self, section, value)
     if value then
         value = value:gsub("\r\n?", "\n")
         fs.writefile(conffile, value)
-        luci.sys.call("/etc/init.d/sing-box restart >/dev/null 2>&1 &")
+        luci.sys.call("service sing-box restart >/dev/null 2>&1 &")
     end
 end
 

@@ -1,13 +1,13 @@
 <script type="text/javascript">
   //<![CDATA[
   XHR.poll(3, '<%=url([[admin]], [[services]], [[sing-box]], [[get_status]])%>', null, function (x, data) {
-    var tb = document.getElementById('status')
+    var status_elem = document.getElementById('status')
 
-    if (data && tb) {
+    if (data && status_elem) {
       if (data.running) {
-        tb.innerHTML = '<em><b style="color:green"><%:sing-box%> <%:RUNNING%></b></em>'
+        status_elem.innerHTML = '<b style="color:green"><%:sing-box%> <%:RUNNING%></b>'
       } else {
-        tb.innerHTML = '<em><b style="color:red"><%:sing-box%> <%:NOT RUNNING%></b></em>'
+        status_elem.innerHTML = '<b style="color:red"><%:sing-box%> <%:NOT RUNNING%></b>'
       }
     }
   })
@@ -22,7 +22,7 @@
   //]]>
 </script>
 <fieldset class="cbi-section">
-  <p id="status">
-    <em><%:Collecting data...%></em><span> <%:Version%>: </span><em id="sing_box_version"><%:Collecting data...%></em>
+  <p>
+    <em id="status"><%:Collecting data...%></em><em>&nbsp;&nbsp;<%:Version%>:</em><em id="sing_box_version"><%:Collecting data...%></em>
   </p>
 </fieldset>

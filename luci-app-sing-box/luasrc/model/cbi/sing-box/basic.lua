@@ -21,20 +21,17 @@ o.default = '/usr/share/sing-box'
 o.rmempty = false
 
 o = s:option(Value, "user", translate("Username"))
-o.default = 'root'
 o.rmempty = false
 
 o = s:option(Value, "log_stderr", translate("Log to stderr"))
-o.default = '1'
 o.rmempty = false
 
 o = s:option(Value, 'log_stdout', translate('Log to stdout'))
-o.default = '1'
 o.rmempty = false
 
 m.apply_on_parse = true
 m.on_after_apply = function(self, map)
-    luci.sys.call("/etc/init.d/sing-box restart >/dev/null 2>&1 &")
+    luci.sys.call("service sing-box restart >/dev/null 2>&1 &")
 end
 
 return m

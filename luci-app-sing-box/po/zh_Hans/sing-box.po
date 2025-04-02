@@ -46,11 +46,14 @@ msgstr "写入系统错误日志"
 msgid "Log to stdout"
 msgstr "写入系统基础日志"
 
-msgid "Configuration has been applied and sing-box has been restarted"
-msgstr "配置已应用，sing-box 已重启"
+msgid "Configuration has been applied and sing-box has been restarted."
+msgstr "配置已应用，sing-box 已重启。"
+
+msgid "Failed to start sing-box. Please check your configuration file for errors."
+msgstr "启动 sing-box 失败，请检查配置文件是否正确。"
 
 msgid "Here you can edit sing-box configuration file. Sing-box will be restart automatically after apply."
-msgstr "在这里您可以编辑 sing-box 配置文件。应用后，Sing-box 将自动重启。"
+msgstr "在这里您可以编辑 sing-box 配置文件。保存后 Sing-box 将自动重启。"
 
 msgid "Save & Apply"
 msgstr "保存并应用"
