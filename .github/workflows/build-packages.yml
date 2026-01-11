@@ -22,28 +22,24 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Set up build environment
+      - name: Set up Docker for OpenWrt build
         run: |
+          # Install Docker (if not already installed)
           sudo apt-get update
-          sudo apt-get install -y build-essential clang llvm git libncurses5-dev zlib1g-dev gawk flex wget unzip python3-distutils python3-serial ccache
+          sudo apt-get install -y docker.io
 
-      - name: Set up OpenWrt feeds
-        run: |
-          git clone https://github.com/openwrt/openwrt.git
-          cd openwrt
-          ./scripts/feeds update -a
-          ./scripts/feeds install -a
+          # Pull the OpenWrt build environment Docker image
+          docker pull openwrtorg/openwrt
 
-      - name: Install necessary packages
-        run: |
-          cd openwrt
-          opkg update
-          opkg install luci luci-lib-base luci-lib-jsonc luci-lib-ip luci-lib-nixio
-
-      - name: Build luci-app-sing-box
-        run: |
-          cd openwrt
-          make package/luci-app-sing-box/compile V=s
+          # Build using Docker
+          docker run --rm -v $(pwd):/workdir openwrtorg/openwrt bash -c "
+            cd /workdir && \
+            ./scripts/feeds update -a && \
+            ./scripts/feeds install -a && \
+            opkg update && \
+            opkg install luci luci-lib-base luci-lib-jsonc luci-lib-ip luci-lib-nixio && \
+            make package/luci-app-sing-box/compile V=s
+          "
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
