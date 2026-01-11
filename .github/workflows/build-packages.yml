@@ -22,22 +22,25 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Set up Docker for OpenWrt build
+      - name: Remove conflicting containerd package
         run: |
-          # Устанавливаем Docker (если его еще нет)
+          sudo apt-get remove --purge containerd
+          sudo apt-get autoremove -y
+          sudo apt-get clean
+
+      - name: Install containerd.io
+        run: |
           sudo apt-get update
-          sudo apt-get install -y docker.io
+          sudo apt-get install -y containerd.io
 
-          # Загружаем официальный Docker-образ для OpenWrt
-          docker pull openwrtorg/openwrt
+      - name: Set up build environment
+        run: |
+          sudo apt-get install -y build-essential clang llvm git libncurses5-dev zlib1g-dev gawk flex wget unzip python3-distutils python3-serial ccache
 
-          # Строим OpenWrt в контейнере
-          docker run --rm -v $(pwd):/workdir openwrtorg/openwrt bash -c "
-            cd /workdir && \
-            ./scripts/feeds update -a && \
-            ./scripts/feeds install -a && \
-            make package/luci-app-sing-box/compile V=s
-          "
+      - name: Build luci-app-sing-box
+        run: |
+          cd openwrt
+          make package/luci-app-sing-box/compile V=s
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
