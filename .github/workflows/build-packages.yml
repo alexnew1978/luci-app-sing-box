@@ -46,7 +46,7 @@ jobs:
           make package/luci-app-sing-box/compile V=s
 
       - name: Upload artifacts
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: luci-app-sing-box
           path: bin/packages/${{ matrix.arch }}/luci-app-sing-box/*.ipk
