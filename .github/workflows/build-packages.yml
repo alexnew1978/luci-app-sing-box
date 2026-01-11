@@ -1,45 +1,52 @@
 name: Build packages
 
-on: workflow_dispatch
+on:
+  workflow_dispatch:
 
 jobs:
   build:
     name: Build ${{ matrix.arch }}-${{ matrix.sdk }}
     runs-on: ubuntu-22.04
+
     strategy:
       fail-fast: false
       matrix:
         arch:
-          - aarch64_generic    
-          # - i386_pentium4
-          # - x86_64
+          - aarch64_generic
         sdk:
           - openwrt-24.10
 
     steps:
-      - uses: actions/checkout@main
+      - name: Checkout repository
+        uses: actions/checkout@main
         with:
           fetch-depth: 0
 
-      - name: Init build dependencies
-        env:
-          DEBIAN_FRONTEND: noninteractive
+      - name: Set up build environment
         run: |
-          sudo swapoff -a
-          sudo rm -rf /etc/apt/sources.list.d/* /usr/share/dotnet /usr/local/lib/android /opt/ghc
-          sudo -E apt-get -qq update
-          sudo -E apt-get -qq install clang-15 llvm-15
+          sudo apt-get update
+          sudo apt-get install -y build-essential clang llvm git libncurses5-dev zlib1g-dev gawk flex wget unzip python3-distutils python3-serial ccache
 
-      - name: Building packages
-        uses: sbwml/openwrt-gh-action-sdk@go1.23
-        env:
-          ARCH: ${{ matrix.arch }}-${{ matrix.sdk }}
-          FEEDNAME: packages_ci
-          PACKAGES: luci-app-sing-box
-          NO_REFRESH_CHECK: true
+      - name: Set up OpenWrt feeds
+        run: |
+          git clone https://github.com/openwrt/openwrt.git
+          cd openwrt
+          ./scripts/feeds update -a
+          ./scripts/feeds install -a
+
+      - name: Install necessary packages
+        run: |
+          cd openwrt
+          opkg update
+          opkg install luci luci-lib-base luci-lib-jsonc luci-lib-ip luci-lib-nixio
+
+      - name: Build luci-app-sing-box
+        run: |
+          cd openwrt
+          make package/luci-app-sing-box/compile V=s
 
       - name: Upload artifacts
-        uses: actions/upload-artifact@main
+        uses: actions/upload-artifact@v2
         with:
-          name: ${{ matrix.arch }}
-          path: bin/packages/${{ matrix.arch }}/packages_ci/*.ipk
+          name: luci-app-sing-box
+          path: bin/packages/${{ matrix.arch }}/luci-app-sing-box/*.ipk
