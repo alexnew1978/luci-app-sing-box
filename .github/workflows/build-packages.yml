@@ -24,20 +24,18 @@ jobs:
 
       - name: Set up Docker for OpenWrt build
         run: |
-          # Install Docker (if not already installed)
+          # Устанавливаем Docker (если его еще нет)
           sudo apt-get update
           sudo apt-get install -y docker.io
 
-          # Pull the OpenWrt build environment Docker image
+          # Загружаем официальный Docker-образ для OpenWrt
           docker pull openwrtorg/openwrt
 
-          # Build using Docker
+          # Строим OpenWrt в контейнере
           docker run --rm -v $(pwd):/workdir openwrtorg/openwrt bash -c "
             cd /workdir && \
             ./scripts/feeds update -a && \
             ./scripts/feeds install -a && \
-            opkg update && \
-            opkg install luci luci-lib-base luci-lib-jsonc luci-lib-ip luci-lib-nixio && \
             make package/luci-app-sing-box/compile V=s
           "
 
