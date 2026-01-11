@@ -5,7 +5,7 @@ on:
 
 jobs:
   build:
-    name: Build ${{ matrix.arch }}-${{ matrix.sdk }}
+    name: Build OpenWrt luci-app-sing-box
     runs-on: ubuntu-22.04
 
     strategy:
@@ -22,25 +22,35 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Download OpenWrt packages from mirror
+      - name: Clone OpenWrt repository
         run: |
-          mkdir -p openwrt
+          # Клонируем репозиторий OpenWrt
+          git clone https://git.openwrt.org/openwrt/openwrt.git
           cd openwrt
-          # Скачать пакеты для rockchip/armv8 из зеркала OpenWrt
-          wget -r -np -nH --cut-dirs=4 --reject "index.html*" https://mirror-03.infra.openwrt.org/releases/24.10.0/targets/rockchip/armv8/packages/
+          # Устанавливаем все зависимости (feeds)
+          ./scripts/feeds update -a
+          ./scripts/feeds install -a
 
       - name: Set up build environment
         run: |
+          # Устанавливаем зависимости для сборки
           sudo apt-get update
           sudo apt-get install -y build-essential clang llvm git libncurses5-dev zlib1g-dev gawk flex wget unzip python3-distutils python3-serial ccache
 
+      - name: Install luci-app-sing-box
+        run: |
+          cd openwrt
+          # Устанавливаем пакет luci-app-sing-box
+          ./scripts/feeds install luci-app-sing-box
+
       - name: Build luci-app-sing-box
         run: |
-          cd openwrt  # Переход в папку, где находятся скачанные пакеты
+          cd openwrt
+          # Собираем только luci-app-sing-box
           make package/luci-app-sing-box/compile V=s
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
           name: luci-app-sing-box
-          path: bin/packages/${{ matrix.arch }}/luci-app-sing-box/*.ipk
+          path: openwrt/bin/packages/${{ matrix.arch }}/luci-app-sing-box/*.ipk
